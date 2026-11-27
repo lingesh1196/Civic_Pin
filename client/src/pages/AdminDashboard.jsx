@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Trash2, Edit3, X, Save } from 'lucide-react';
+import { Trash2, Edit3, X, Save, MessageSquare, Eye } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiRequest } from '../api/client';
 import { StatusBadge, PriorityBadge, formatTicketId, timeAgo } from '../components/StatusBadge';
+import IssueDetailModal from '../components/IssueDetailModal';
 
 export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
