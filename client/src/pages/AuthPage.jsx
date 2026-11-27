@@ -6,7 +6,8 @@ export default function AuthPage() {
   const { login, register } = useAuth();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState('login');
+  const [roleTab, setRoleTab] = useState('citizen'); // 'citizen' | 'admin'
+  const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [name, setName] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function AuthPage() {
     setLoading(true);
     try {
       let loggedIn;
-      if (mode === 'login') {
+      if (mode === 'login' || roleTab === 'admin') {
         loggedIn = await login(email, password);
       } else {
         loggedIn = await register({ name, email, password, neighborhood });
@@ -47,38 +48,83 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16 space-y-6">
+    <div className="max-w-md mx-auto px-4 py-14 space-y-6">
       <div className="space-y-1.5">
         <h1 className="font-serif-editorial text-3xl font-medium text-[#1C211E]">
-          {mode === 'login' ? 'Sign in to CivicPin' : 'Create an account'}
+          {roleTab === 'admin'
+            ? 'Admin sign in'
+            : mode === 'login'
+              ? 'Citizen sign in'
+              : 'Create a citizen account'}
         </h1>
         <p className="text-sm text-[#5C635E]">
-          {mode === 'login'
-            ? 'Report issues, upvote neighborhood priorities, or open the admin console.'
-            : 'Register as a resident to file and follow local civic reports.'}
+          {roleTab === 'admin'
+            ? 'Sign in with a municipal admin account to manage and resolve civic reports.'
+            : 'Report issues, upvote neighborhood priorities, and post updates.'}
         </p>
       </div>
 
-      <div className="flex gap-2.5">
+      {/* Role Switcher: Citizen Login vs Admin Login */}
+      <div className="grid grid-cols-2 border border-[#DDD6CB] rounded-md overflow-hidden bg-white">
         <button
           type="button"
-          disabled={loading}
-          onClick={() => handleDemoLogin('citizen@civicpin.org', 'citizen123')}
-          className="flex-1 py-2 px-3 rounded-md border border-[#DDD6CB] bg-white hover:border-[#1C211E] text-sm font-medium text-[#1C211E] cursor-pointer"
+          onClick={() => {
+            setRoleTab('citizen');
+            setError('');
+          }}
+          className={`py-2.5 text-sm font-medium transition-colors cursor-pointer ${
+            roleTab === 'citizen'
+              ? 'bg-[#1C211E] text-white'
+              : 'text-[#5C635E] hover:text-[#1C211E]'
+          }`}
         >
-          Demo Citizen
+          User / Citizen Login
         </button>
         <button
           type="button"
-          disabled={loading}
-          onClick={() => handleDemoLogin('admin@civicpin.org', 'admin123')}
-          className="flex-1 py-2 px-3 rounded-md border border-[#DDD6CB] bg-white hover:border-[#1C211E] text-sm font-medium text-[#1C211E] cursor-pointer"
+          onClick={() => {
+            setRoleTab('admin');
+            setMode('login');
+            setError('');
+          }}
+          className={`py-2.5 text-sm font-medium transition-colors cursor-pointer ${
+            roleTab === 'admin'
+              ? 'bg-[#1C211E] text-white'
+              : 'text-[#5C635E] hover:text-[#1C211E]'
+          }`}
         >
-          Demo Admin
+          Admin Login
         </button>
       </div>
 
-      <div className="border-t border-[#E3DDD3]" />
+      {/* Quick One-Click Demo Login */}
+      <div className="p-3.5 rounded-md bg-[#F4EFE7] border border-[#E3DDD3] flex items-center justify-between gap-3">
+        <div className="text-xs text-[#4E5550]">
+          {roleTab === 'admin' ? (
+            <>
+              <div className="font-semibold text-[#1C211E]">Demo Admin</div>
+              <div>admin@civicpin.org · admin123</div>
+            </>
+          ) : (
+            <>
+              <div className="font-semibold text-[#1C211E]">Demo Citizen</div>
+              <div>citizen@civicpin.org · citizen123</div>
+            </>
+          )}
+        </div>
+        <button
+          type="button"
+          disabled={loading}
+          onClick={() =>
+            roleTab === 'admin'
+              ? handleDemoLogin('admin@civicpin.org', 'admin123')
+              : handleDemoLogin('citizen@civicpin.org', 'citizen123')
+          }
+          className="px-3 py-1.5 rounded bg-[#B84A27] hover:bg-[#993B1D] text-white text-xs font-medium cursor-pointer whitespace-nowrap"
+        >
+          One-click sign in
+        </button>
+      </div>
 
       {error && (
         <div className="p-3 rounded-md bg-[#FBECEC] border border-[#EAC6C6] text-sm text-[#8C2D2D]">
@@ -87,7 +133,7 @@ export default function AuthPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {mode === 'register' && (
+        {roleTab === 'citizen' && mode === 'register' && (
           <>
             <div>
               <label className="block text-sm font-medium text-[#1C211E] mb-1">Full name</label>
@@ -120,7 +166,7 @@ export default function AuthPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            placeholder={roleTab === 'admin' ? 'admin@civicpin.org' : 'you@example.com'}
             className="w-full px-3 py-2 rounded-md bg-white border border-[#DDD6CB] text-sm focus:outline-none focus:border-[#1C211E]"
           />
         </div>
@@ -143,41 +189,49 @@ export default function AuthPage() {
           disabled={loading}
           className="w-full py-2.5 rounded-md bg-[#1C211E] hover:bg-[#B84A27] disabled:opacity-60 text-white font-medium text-sm transition-colors cursor-pointer"
         >
-          {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Create account'}
+          {loading
+            ? 'Please wait...'
+            : roleTab === 'admin'
+              ? 'Sign in as Admin'
+              : mode === 'login'
+                ? 'Sign in as Citizen'
+                : 'Create account'}
         </button>
       </form>
 
-      <div className="text-sm text-[#5C635E]">
-        {mode === 'login' ? (
-          <>
-            Don&apos;t have an account?{' '}
-            <button
-              type="button"
-              onClick={() => {
-                setMode('register');
-                setError('');
-              }}
-              className="font-medium text-[#B84A27] hover:underline cursor-pointer"
-            >
-              Sign up
-            </button>
-          </>
-        ) : (
-          <>
-            Already have an account?{' '}
-            <button
-              type="button"
-              onClick={() => {
-                setMode('login');
-                setError('');
-              }}
-              className="font-medium text-[#B84A27] hover:underline cursor-pointer"
-            >
-              Sign in
-            </button>
-          </>
-        )}
-      </div>
+      {roleTab === 'citizen' && (
+        <div className="text-sm text-[#5C635E]">
+          {mode === 'login' ? (
+            <>
+              Don&apos;t have an account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('register');
+                  setError('');
+                }}
+                className="font-medium text-[#B84A27] hover:underline cursor-pointer"
+              >
+                Sign up
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('login');
+                  setError('');
+                }}
+                className="font-medium text-[#B84A27] hover:underline cursor-pointer"
+              >
+                Sign in
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
