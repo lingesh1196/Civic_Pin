@@ -29,6 +29,28 @@ npm run dev:server
 npm run dev:client
 ```
 
+## Database Setup (MongoDB)
+
+CivicPin uses **MongoDB + Mongoose** (`server/models/User.js`, `server/models/Issue.js`).
+
+### Option 1: Docker (Local MongoDB)
+```bash
+docker compose up -d
+cp server/.env.example server/.env
+npm --prefix server run seed
+```
+
+### Option 2: MongoDB Atlas (Free Cloud)
+1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/atlas) and copy your connection string.
+2. Create `server/.env` from `server/.env.example` and set:
+   ```env
+   MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/civicpin
+   JWT_SECRET=your_secret_key
+   ```
+3. Run `npm --prefix server run seed` to populate demo accounts and sample civic issues (or just start the server — it auto-seeds on first run).
+
+> If `MONGODB_URI` is not set or MongoDB is unreachable, the server automatically falls back to a persistent local JSON store (`server/data/db.json`) so the app still runs out of the box.
+
 ### Demo Accounts
 
 | Role | Email | Password |
