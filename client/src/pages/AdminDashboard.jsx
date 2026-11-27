@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Trash2, Edit3, X, Save, MessageSquare, Eye } from 'lucide-react';
+import { Trash2, Edit3, X, Save, MessageSquare, Eye, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiRequest } from '../api/client';
 import { StatusBadge, PriorityBadge, formatTicketId, timeAgo } from '../components/StatusBadge';
@@ -66,35 +66,37 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="pb-5 border-b border-[#E4DFD3] flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="font-mono-code text-[11px] uppercase tracking-widest text-[#C84B31] mb-1">
-            Municipal Dispatch Console
+    <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div className="pb-6 border-b border-[#E6E8EC] flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB]">
+            <Shield className="w-3.5 h-3.5" /> Municipal Operations
           </div>
-          <h1 className="font-display text-3xl font-bold text-[#18181B]">Operations Ledger</h1>
-          <p className="text-sm text-[#57534E] mt-1">
-            Triage high-vote citizen reports, assign field crews, and publish official status updates.
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0B1220]">
+            Admin Dispatch Console
+          </h1>
+          <p className="text-sm text-[#64748B]">
+            Review evidence photos, reply to citizens, assign departments, and track resolution SLAs.
           </p>
         </div>
 
         {stats && (
-          <div className="flex flex-wrap gap-6 font-mono-code text-xs">
-            <div>
-              <div className="text-[#78716C] uppercase text-[10px]">Total</div>
-              <div className="text-2xl font-bold text-[#18181B]">{stats.total}</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">Total</div>
+              <div className="text-xl font-bold text-[#0B1220]">{stats.total}</div>
             </div>
-            <div>
-              <div className="text-[#78716C] uppercase text-[10px]">Open</div>
-              <div className="text-2xl font-bold text-[#D97706]">{stats.open}</div>
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">Open</div>
+              <div className="text-xl font-bold text-[#D97706]">{stats.open}</div>
             </div>
-            <div>
-              <div className="text-[#78716C] uppercase text-[10px]">In Progress</div>
-              <div className="text-2xl font-bold text-[#2563EB]">{stats.inProgress}</div>
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">In Progress</div>
+              <div className="text-xl font-bold text-[#2563EB]">{stats.inProgress}</div>
             </div>
-            <div>
-              <div className="text-[#78716C] uppercase text-[10px]">Resolved</div>
-              <div className="text-2xl font-bold text-[#2D6A4F]">{stats.resolved}</div>
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">Resolved</div>
+              <div className="text-xl font-bold text-[#059669]">{stats.resolved}</div>
             </div>
           </div>
         )}
@@ -102,23 +104,23 @@ export default function AdminDashboard() {
 
       {/* Category Breakdown */}
       {stats?.byCategory?.length > 0 && (
-        <div className="bg-white rounded-xl border border-[#E4DFD3] p-5">
-          <h2 className="font-mono-code text-[11px] uppercase tracking-wider text-[#78716C] mb-3">
+        <div className="premium-card rounded-2xl p-5">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-4">
             Reports by Category
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {stats.byCategory.map((item) => {
               const pct = stats.total ? Math.round((item.count / stats.total) * 100) : 0;
               return (
-                <div key={item.category} className="space-y-1">
+                <div key={item.category} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-[#18181B]">{item.category}</span>
-                    <span className="font-mono-code text-[#78716C]">
+                    <span className="font-semibold text-[#0B1220]">{item.category}</span>
+                    <span className="font-mono-code text-[#64748B]">
                       {item.count} ({pct}%)
                     </span>
                   </div>
-                  <div className="h-1.5 rounded-full bg-[#EFECE4] overflow-hidden">
-                    <div className="h-full rounded-full bg-[#18181B]" style={{ width: `${pct}%` }} />
+                  <div className="h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+                    <div className="h-full rounded-full bg-[#2563EB]" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );
@@ -127,21 +129,21 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Priority Issue Queue */}
-      <div className="bg-white rounded-xl border border-[#E4DFD3] overflow-hidden">
-        <div className="px-5 py-3.5 bg-[#FAF8F4] border-b border-[#E4DFD3] flex flex-wrap items-center justify-between gap-3">
-          <h2 className="font-mono-code text-xs uppercase tracking-wider font-semibold text-[#18181B]">
-            Priority Queue ({filteredIssues.length})
+      {/* Priority Issue Queue (Zero Horizontal Scroll) */}
+      <div className="premium-card rounded-2xl overflow-hidden">
+        <div className="px-5 py-3.5 bg-[#F8FAFC] border-b border-[#E6E8EC] flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-sm font-bold text-[#0B1220]">
+            Priority Queue <span className="text-[#64748B] font-normal">({filteredIssues.length})</span>
           </h2>
-          <div className="flex items-center gap-1.5">
+          <div className="inline-flex flex-wrap items-center gap-1 p-1 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0]">
             {['All', 'Open', 'In Progress', 'Resolved', 'Rejected'].map((st) => (
               <button
                 key={st}
                 onClick={() => setStatusFilter(st)}
-                className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors ${
+                className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
                   statusFilter === st
-                    ? 'bg-[#18181B] text-white'
-                    : 'bg-white border border-[#E4DFD3] text-[#57534E] hover:border-[#18181B]'
+                    ? 'bg-white text-[#0B1220] shadow-xs'
+                    : 'text-[#64748B] hover:text-[#0B1220]'
                 }`}
               >
                 {st}
@@ -150,11 +152,11 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="divide-y divide-[#EFECE4]">
+        <div className="divide-y divide-[#F1F5F9]">
           {filteredIssues.map((issue) => (
             <div
               key={issue._id}
-              className="px-4 py-3.5 hover:bg-[#FAF8F4] flex flex-col md:flex-row md:items-center justify-between gap-3"
+              className="px-4 py-3.5 hover:bg-[#F8FAFC] flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors"
             >
               {/* Left: Photo Thumbnail + Ticket, Title, Address & Dept */}
               <div
@@ -165,29 +167,29 @@ export default function AdminDashboard() {
                   <img
                     src={issue.photoUrl}
                     alt={issue.title}
-                    className="w-16 h-14 rounded-lg object-cover border border-[#E4DFD3] shrink-0 group-hover:opacity-90 transition-opacity"
+                    className="w-16 h-14 rounded-xl object-cover border border-[#E6E8EC] shrink-0"
                   />
                 )}
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="font-mono-code text-[11px] text-[#78716C] whitespace-nowrap shrink-0">
+                    <span className="font-mono-code text-[11px] text-[#64748B] whitespace-nowrap shrink-0">
                       #{formatTicketId(issue._id)}
                     </span>
-                    <span className="font-semibold text-sm text-[#18181B] group-hover:text-[#C84B31] transition-colors truncate">
+                    <span className="font-semibold text-sm text-[#0B1220] group-hover:text-[#2563EB] transition-colors truncate">
                       {issue.title}
                     </span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#57534E]">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-[#64748B]">
                     <span className="truncate max-w-full">{issue.location?.address}</span>
-                    <span className="text-[#D6D0C4]">·</span>
-                    <span className="font-medium text-[#18181B]">{issue.category}</span>
-                    <span className="text-[#78716C]">({issue.department})</span>
+                    <span className="text-[#CBD5E1]">·</span>
+                    <span className="font-medium text-[#334155]">{issue.category}</span>
+                    <span>({issue.department})</span>
                   </div>
-                  <div className="flex items-center gap-3 text-[11px] text-[#78716C]">
+                  <div className="flex items-center gap-3 text-[11px] text-[#94A3B8]">
                     <span>
                       Filed {timeAgo(issue.createdAt)} by {issue.reportedBy?.name}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[#57534E]">
+                    <span className="inline-flex items-center gap-1 text-[#475569] font-medium">
                       <MessageSquare className="w-3 h-3" /> {issue.comments?.length || 0}
                     </span>
                   </div>
@@ -196,7 +198,7 @@ export default function AdminDashboard() {
 
               {/* Right: Votes, Priority, Status & Actions */}
               <div className="flex flex-wrap md:flex-nowrap items-center gap-2.5 shrink-0">
-                <span className="inline-flex items-center gap-1 font-mono-code text-xs font-semibold text-[#C84B31] bg-[#C84B31]/10 px-2.5 py-1 rounded whitespace-nowrap">
+                <span className="inline-flex items-center gap-1 font-mono-code text-xs font-semibold text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] px-2.5 py-1 rounded-lg whitespace-nowrap">
                   ▲ {issue.upvotes?.length || 0}
                 </span>
 
@@ -207,20 +209,20 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => setViewing(issue)}
                     title="View photo & comments"
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#E4DFD3] hover:border-[#18181B] text-[#57534E] hover:text-[#18181B] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#E2E8F0] bg-white hover:border-[#94A3B8] text-[#475569] hover:text-[#0B1220] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
                   >
                     <Eye className="w-3.5 h-3.5" /> View
                   </button>
                   <button
                     onClick={() => setEditing({ ...issue })}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#D6D0C4] hover:border-[#18181B] hover:bg-[#18181B] hover:text-white text-[#18181B] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#0B1220] hover:bg-[#2563EB] text-white text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
                   >
                     <Edit3 className="w-3.5 h-3.5" /> Update
                   </button>
                   <button
                     onClick={() => handleDelete(issue._id)}
                     title="Delete issue"
-                    className="p-1.5 rounded-lg text-[#78716C] hover:text-[#9F1239] hover:bg-[#FFE4E6] transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -233,35 +235,35 @@ export default function AdminDashboard() {
 
       {/* Edit Modal */}
       {editing && (
-        <div className="fixed inset-0 z-50 bg-[#18181B]/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-[#E4DFD3] overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#E4DFD3] flex items-center justify-between bg-[#FAF8F4]">
-              <h3 className="font-display text-lg font-bold text-[#18181B]">
+        <div className="fixed inset-0 z-50 bg-[#0B1220]/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-[#E6E8EC] overflow-hidden">
+            <div className="px-6 py-4 border-b border-[#E6E8EC] flex items-center justify-between bg-[#F8FAFC]">
+              <h3 className="text-base font-bold text-[#0B1220]">
                 Update #{formatTicketId(editing._id)}
               </h3>
               <button
                 onClick={() => setEditing(null)}
-                className="p-1.5 rounded-lg text-[#78716C] hover:text-[#18181B] cursor-pointer"
+                className="p-1.5 rounded-lg text-[#64748B] hover:text-[#0B1220] cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleSaveUpdate} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-              <div className="text-sm font-semibold text-[#18181B]">{editing.title}</div>
+              <div className="text-sm font-semibold text-[#0B1220]">{editing.title}</div>
               {editing.photoUrl && (
                 <img
                   src={editing.photoUrl}
                   alt={editing.title}
-                  className="w-full h-40 object-cover rounded-xl border border-[#E4DFD3]"
+                  className="w-full h-40 object-cover rounded-xl border border-[#E6E8EC]"
                 />
               )}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#57534E] mb-1">Status</label>
+                  <label className="block text-xs font-semibold text-[#475569] mb-1">Status</label>
                   <select
                     value={editing.status}
                     onChange={(e) => setEditing({ ...editing, status: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-[#D6D0C4] text-sm bg-white"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] text-sm bg-white focus:outline-none focus:border-[#2563EB]"
                   >
                     <option value="Open">Open</option>
                     <option value="In Progress">In Progress</option>
@@ -270,11 +272,11 @@ export default function AdminDashboard() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#57534E] mb-1">Priority</label>
+                  <label className="block text-xs font-semibold text-[#475569] mb-1">Priority</label>
                   <select
                     value={editing.priority}
                     onChange={(e) => setEditing({ ...editing, priority: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-[#D6D0C4] text-sm bg-white"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] text-sm bg-white focus:outline-none focus:border-[#2563EB]"
                   >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
@@ -285,17 +287,19 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#57534E] mb-1">Assigned Department</label>
+                <label className="block text-xs font-semibold text-[#475569] mb-1">
+                  Assigned Department
+                </label>
                 <input
                   type="text"
                   value={editing.department || ''}
                   onChange={(e) => setEditing({ ...editing, department: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[#D6D0C4] text-sm"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] text-sm focus:outline-none focus:border-[#2563EB]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#57534E] mb-1">
+                <label className="block text-xs font-semibold text-[#475569] mb-1">
                   Official Dispatch / Resolution Note
                 </label>
                 <textarea
@@ -303,7 +307,7 @@ export default function AdminDashboard() {
                   value={editing.resolutionNote || ''}
                   onChange={(e) => setEditing({ ...editing, resolutionNote: e.target.value })}
                   placeholder="Share crew dispatch details or resolution confirmation..."
-                  className="w-full px-3 py-2 rounded-lg border border-[#D6D0C4] text-sm"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] text-sm focus:outline-none focus:border-[#2563EB]"
                 />
               </div>
 
@@ -311,14 +315,14 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={() => setEditing(null)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-[#57534E] hover:bg-[#F2EFE9] cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-[#64748B] hover:bg-[#F1F5F9] cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#C84B31] hover:bg-[#B03E26] text-white text-sm font-semibold cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-semibold cursor-pointer"
                 >
                   <Save className="w-4 h-4" />
                   {saving ? 'Saving...' : 'Save update'}
@@ -328,6 +332,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
       {/* View Photo & Comments Modal */}
       {viewing && (
         <IssueDetailModal

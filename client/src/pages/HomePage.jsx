@@ -75,50 +75,55 @@ export default function HomePage({ refreshSignal }) {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      {/* Editorial Civic Header */}
-      <section className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 border-b border-[#E4DFD3]">
+    <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Refined Minimal Header + Live Metrics */}
+      <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 pb-6 border-b border-[#E6E8EC]">
         <div className="space-y-1.5">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#18181B]">
-            Neighborhood Civic Log
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#2563EB]">
+            <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
+            Live Civic Feed
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0B1220]">
+            Local Infrastructure &amp; Issue Tracker
           </h1>
-          <p className="text-sm sm:text-[15px] text-[#57534E] max-w-xl">
-            Street-level reports filed by residents, prioritized by community votes, and tracked through municipal repair.
+          <p className="text-sm text-[#64748B] max-w-xl">
+            Report street-level faults with photos and coordinates, upvote urgent issues, and follow transparent municipal resolution.
           </p>
         </div>
 
         {stats && (
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono-code text-xs text-[#57534E]">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#D97706]" />
-              <strong className="text-[#18181B]">{stats.open}</strong> open
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
-              <strong className="text-[#18181B]">{stats.inProgress}</strong> in progress
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#2D6A4F]" />
-              <strong className="text-[#18181B]">{stats.resolved}</strong> resolved
-            </span>
-            <span className="text-[#2D6A4F] font-semibold border-l border-[#D6D0C4] pl-4">
-              {stats.resolutionRate}% fixed
-            </span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">Open</div>
+              <div className="text-xl font-bold text-[#0B1220] mt-0.5">{stats.open}</div>
+            </div>
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">In Progress</div>
+              <div className="text-xl font-bold text-[#2563EB] mt-0.5">{stats.inProgress}</div>
+            </div>
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">Resolved</div>
+              <div className="text-xl font-bold text-[#059669] mt-0.5">{stats.resolved}</div>
+            </div>
+            <div className="bg-white border border-[#E6E8EC] rounded-xl px-4 py-2.5 shadow-2xs">
+              <div className="text-[11px] font-medium text-[#64748B]">Resolution Rate</div>
+              <div className="text-xl font-bold text-[#0B1220] mt-0.5">{stats.resolutionRate}%</div>
+            </div>
           </div>
         )}
       </section>
 
       {/* Filter & View Bar */}
       <section className="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="inline-flex flex-wrap items-center gap-1 p-1 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] w-fit">
           {STATUS_TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setStatus(tab)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 status === tab
-                  ? 'bg-[#18181B] text-[#FFFDF9]'
-                  : 'bg-white border border-[#E4DFD3] text-[#57534E] hover:border-[#18181B] hover:text-[#18181B]'
+                  ? 'bg-white text-[#0B1220] shadow-xs'
+                  : 'text-[#64748B] hover:text-[#0B1220]'
               }`}
             >
               {tab}
@@ -128,20 +133,20 @@ export default function HomePage({ refreshSignal }) {
 
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative flex-1 sm:w-64">
-            <Search className="w-3.5 h-3.5 text-[#78716C] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#94A3B8] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search street, area, issue..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white border border-[#E4DFD3] text-sm focus:outline-none focus:border-[#18181B]"
+              className="w-full pl-9 pr-3 py-2 rounded-xl bg-white border border-[#E2E8F0] text-sm text-[#0B1220] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
             />
           </div>
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-white border border-[#E4DFD3] text-sm text-[#18181B] focus:outline-none focus:border-[#18181B]"
+            className="px-3 py-2 rounded-xl bg-white border border-[#E2E8F0] text-xs font-semibold text-[#334155] focus:outline-none focus:border-[#2563EB]"
           >
             <option value="All">All categories</option>
             {CATEGORIES.map((c) => (
@@ -154,19 +159,18 @@ export default function HomePage({ refreshSignal }) {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-white border border-[#E4DFD3] text-sm text-[#18181B] focus:outline-none focus:border-[#18181B]"
+            className="px-3 py-2 rounded-xl bg-white border border-[#E2E8F0] text-xs font-semibold text-[#334155] focus:outline-none focus:border-[#2563EB]"
           >
             <option value="upvotes">Top voted</option>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
           </select>
 
-          <div className="inline-flex rounded-lg border border-[#E4DFD3] bg-white p-0.5">
+          <div className="inline-flex rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-1">
             <button
               onClick={() => setViewMode('split')}
-              title="Split view"
-              className={`px-2.5 py-1 rounded-md text-xs font-medium inline-flex items-center gap-1 cursor-pointer ${
-                viewMode === 'split' ? 'bg-[#18181B] text-white' : 'text-[#57534E] hover:text-[#18181B]'
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all ${
+                viewMode === 'split' ? 'bg-white text-[#0B1220] shadow-xs' : 'text-[#64748B] hover:text-[#0B1220]'
               }`}
             >
               <Columns2 className="w-3.5 h-3.5" />
@@ -174,9 +178,8 @@ export default function HomePage({ refreshSignal }) {
             </button>
             <button
               onClick={() => setViewMode('list')}
-              title="List view"
-              className={`px-2.5 py-1 rounded-md text-xs font-medium inline-flex items-center gap-1 cursor-pointer ${
-                viewMode === 'list' ? 'bg-[#18181B] text-white' : 'text-[#57534E] hover:text-[#18181B]'
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all ${
+                viewMode === 'list' ? 'bg-white text-[#0B1220] shadow-xs' : 'text-[#64748B] hover:text-[#0B1220]'
               }`}
             >
               <List className="w-3.5 h-3.5" />
@@ -184,9 +187,8 @@ export default function HomePage({ refreshSignal }) {
             </button>
             <button
               onClick={() => setViewMode('map')}
-              title="Map view"
-              className={`px-2.5 py-1 rounded-md text-xs font-medium inline-flex items-center gap-1 cursor-pointer ${
-                viewMode === 'map' ? 'bg-[#18181B] text-white' : 'text-[#57534E] hover:text-[#18181B]'
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all ${
+                viewMode === 'map' ? 'bg-white text-[#0B1220] shadow-xs' : 'text-[#64748B] hover:text-[#0B1220]'
               }`}
             >
               <MapIcon className="w-3.5 h-3.5" />
@@ -200,13 +202,13 @@ export default function HomePage({ refreshSignal }) {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="h-32 rounded-xl bg-[#EAE5DA] animate-pulse" />
+            <div key={n} className="h-32 rounded-2xl bg-[#E2E8F0]/60 animate-pulse" />
           ))}
         </div>
       ) : issues.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[#E4DFD3] p-12 text-center space-y-1.5">
-          <p className="font-display text-lg font-semibold text-[#18181B]">No reports match these filters</p>
-          <p className="text-sm text-[#78716C]">Try switching status tabs or clearing your search query.</p>
+        <div className="premium-card rounded-2xl p-12 text-center space-y-1.5">
+          <p className="text-base font-semibold text-[#0B1220]">No issues match your filters</p>
+          <p className="text-sm text-[#64748B]">Try clearing your search or switching status tabs.</p>
         </div>
       ) : viewMode === 'map' ? (
         <IssueMap issues={issues} onSelectIssue={setSelectedIssue} height="600px" />

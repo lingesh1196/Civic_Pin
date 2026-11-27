@@ -22,7 +22,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F4EF] text-[#18181B]">
+    <div className="min-h-screen flex flex-col bg-[#FAFAFB] text-[#0B1220]">
       <Navbar onOpenReport={handleOpenReport} />
 
       <main className="flex-1">
@@ -33,12 +33,12 @@ export default function App() {
         </Routes>
       </main>
 
-      <footer className="border-t border-[#E4DFD3] bg-[#F6F4EF] py-6 mt-10">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#78716C]">
+      <footer className="border-t border-[#E6E8EC] bg-white py-6 mt-12">
+        <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#64748B]">
           <span>
-            <strong className="font-display text-[#18181B]">CivicPin</strong> — Public neighborhood issue log & municipal dispatch.
+            <strong className="text-[#0B1220] font-semibold">CivicPin</strong> — Transparent civic issue reporting &amp; municipal resolution.
           </span>
-          <span className="font-mono-code text-[11px]">MERN · OpenStreetMap · Community Verified</span>
+          <span className="font-mono-code text-[11px] text-[#94A3B8]">MERN Stack · OpenStreetMap</span>
         </div>
       </footer>
 

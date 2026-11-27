@@ -1,24 +1,24 @@
 import React from 'react';
 
 export const STATUS_DOTS = {
-  Open: 'bg-[#D97706]',
+  Open: 'bg-[#F59E0B]',
   'In Progress': 'bg-[#2563EB]',
-  Resolved: 'bg-[#2D6A4F]',
-  Rejected: 'bg-[#9F1239]',
+  Resolved: 'bg-[#10B981]',
+  Rejected: 'bg-[#EF4444]',
 };
 
 export const STATUS_TEXT = {
-  Open: 'text-[#92400E] bg-[#FEF3C7]/80 border-[#FDE68A]',
-  'In Progress': 'text-[#1E40AF] bg-[#DBEAFE]/70 border-[#BFDBFE]',
-  Resolved: 'text-[#1B4332] bg-[#D8F3DC]/80 border-[#B7E4C7]',
-  Rejected: 'text-[#881337] bg-[#FFE4E6]/80 border-[#FECDD3]',
+  Open: 'text-[#B45309] bg-[#FFFBEB] border-[#FDE68A]',
+  'In Progress': 'text-[#1D4ED8] bg-[#EFF6FF] border-[#BFDBFE]',
+  Resolved: 'text-[#047857] bg-[#ECFDF5] border-[#A7F3D0]',
+  Rejected: 'text-[#B91C1C] bg-[#FEF2F2] border-[#FECACA]',
 };
 
 export const PRIORITY_STYLES = {
-  Low: 'text-[#57534E]',
-  Medium: 'text-[#0369A1]',
-  High: 'text-[#C2410C]',
-  Critical: 'text-[#C84B31] font-semibold',
+  Low: 'text-[#64748B]',
+  Medium: 'text-[#0284C7]',
+  High: 'text-[#D97706] font-semibold',
+  Critical: 'text-[#DC2626] font-semibold',
 };
 
 export const CATEGORIES = [
@@ -33,10 +33,12 @@ export const CATEGORIES = [
 ];
 
 export function StatusBadge({ status }) {
-  const cls = STATUS_TEXT[status] || 'text-stone-700 bg-stone-100 border-stone-200';
-  const dot = STATUS_DOTS[status] || 'bg-stone-500';
+  const cls = STATUS_TEXT[status] || 'text-slate-700 bg-slate-50 border-slate-200';
+  const dot = STATUS_DOTS[status] || 'bg-slate-400';
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${cls}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${cls}`}
+    >
       <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
       {status}
     </span>
@@ -44,9 +46,9 @@ export function StatusBadge({ status }) {
 }
 
 export function PriorityBadge({ priority }) {
-  const cls = PRIORITY_STYLES[priority] || 'text-stone-600';
+  const cls = PRIORITY_STYLES[priority] || 'text-slate-500';
   return (
-    <span className={`font-mono-code text-[11px] uppercase tracking-wider ${cls}`}>
+    <span className={`font-mono-code text-[11px] uppercase tracking-wider whitespace-nowrap ${cls}`}>
       {priority}
     </span>
   );
