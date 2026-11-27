@@ -11,6 +11,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [statusFilter, setStatusFilter] = useState('All');
   const [editing, setEditing] = useState(null);
+  const [viewing, setViewing] = useState(null);
   const [saving, setSaving] = useState(false);
 
   async function loadAll() {
@@ -154,24 +155,41 @@ export default function AdminDashboard() {
               key={issue._id}
               className="px-4 py-3.5 hover:bg-[#FAF8F4] flex flex-col md:flex-row md:items-center justify-between gap-3"
             >
-              {/* Left: Ticket, Title, Address & Dept */}
-              <div className="min-w-0 flex-1 space-y-1">
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-mono-code text-[11px] text-[#78716C] whitespace-nowrap shrink-0">
-                    #{formatTicketId(issue._id)}
-                  </span>
-                  <span className="font-semibold text-sm text-[#18181B] truncate">
-                    {issue.title}
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#57534E]">
-                  <span className="truncate max-w-full">{issue.location?.address}</span>
-                  <span className="text-[#D6D0C4]">·</span>
-                  <span className="font-medium text-[#18181B]">{issue.category}</span>
-                  <span className="text-[#78716C]">({issue.department})</span>
-                </div>
-                <div className="text-[11px] text-[#78716C]">
-                  Filed {timeAgo(issue.createdAt)} by {issue.reportedBy?.name}
+              {/* Left: Photo Thumbnail + Ticket, Title, Address & Dept */}
+              <div
+                onClick={() => setViewing(issue)}
+                className="min-w-0 flex-1 flex items-start gap-3 cursor-pointer group"
+              >
+                {issue.photoUrl && (
+                  <img
+                    src={issue.photoUrl}
+                    alt={issue.title}
+                    className="w-16 h-14 rounded-lg object-cover border border-[#E4DFD3] shrink-0 group-hover:opacity-90 transition-opacity"
+                  />
+                )}
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="font-mono-code text-[11px] text-[#78716C] whitespace-nowrap shrink-0">
+                      #{formatTicketId(issue._id)}
+                    </span>
+                    <span className="font-semibold text-sm text-[#18181B] group-hover:text-[#C84B31] transition-colors truncate">
+                      {issue.title}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#57534E]">
+                    <span className="truncate max-w-full">{issue.location?.address}</span>
+                    <span className="text-[#D6D0C4]">·</span>
+                    <span className="font-medium text-[#18181B]">{issue.category}</span>
+                    <span className="text-[#78716C]">({issue.department})</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[11px] text-[#78716C]">
+                    <span>
+                      Filed {timeAgo(issue.createdAt)} by {issue.reportedBy?.name}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[#57534E]">
+                      <MessageSquare className="w-3 h-3" /> {issue.comments?.length || 0}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -185,6 +203,13 @@ export default function AdminDashboard() {
                 <StatusBadge status={issue.status} />
 
                 <div className="flex items-center gap-1.5 pl-1">
+                  <button
+                    onClick={() => setViewing(issue)}
+                    title="View photo & comments"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#E4DFD3] hover:border-[#18181B] text-[#57534E] hover:text-[#18181B] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
+                  >
+                    <Eye className="w-3.5 h-3.5" /> View
+                  </button>
                   <button
                     onClick={() => setEditing({ ...issue })}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#D6D0C4] hover:border-[#18181B] hover:bg-[#18181B] hover:text-white text-[#18181B] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
@@ -220,8 +245,15 @@ export default function AdminDashboard() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleSaveUpdate} className="p-6 space-y-4">
+            <form onSubmit={handleSaveUpdate} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
               <div className="text-sm font-semibold text-[#18181B]">{editing.title}</div>
+              {editing.photoUrl && (
+                <img
+                  src={editing.photoUrl}
+                  alt={editing.title}
+                  className="w-full h-40 object-cover rounded-xl border border-[#E4DFD3]"
+                />
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-[#57534E] mb-1">Status</label>
@@ -294,6 +326,19 @@ export default function AdminDashboard() {
             </form>
           </div>
         </div>
+      )}
+      {/* View Photo & Comments Modal */}
+      {viewing && (
+        <IssueDetailModal
+          issue={viewing}
+          user={user}
+          onClose={() => setViewing(null)}
+          onIssueUpdated={(updated) => {
+            setIssues((prev) => prev.map((i) => (i._id === updated._id ? updated : i)));
+            setViewing(updated);
+          }}
+          onRequireAuth={() => setViewing(null)}
+        />
       )}
     </div>
   );
