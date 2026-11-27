@@ -58,37 +58,32 @@ export default function Navbar({ onOpenReport }) {
           >
             REPORT
           </button>
-          {user?.role === 'admin' && (
-            <Link
-              to="/admin"
-              className={`px-3.5 py-2 font-semibold transition-colors ${
-                isAdmin
-                  ? 'bg-[#141414] text-[#F3F0E6]'
-                  : 'text-[#141414] hover:bg-[#E5E0D0]'
-              }`}
-            >
-              ADMIN
-            </Link>
-          )}
-          {!user && (
-            <Link
-              to="/auth"
-              className={`px-3.5 py-2 font-semibold transition-colors ${
-                isAuth
-                  ? 'bg-[#141414] text-[#F3F0E6]'
-                  : 'text-[#141414] hover:bg-[#E5E0D0]'
-              }`}
-            >
-              SIGN IN
-            </Link>
-          )}
+          <Link
+            to="/admin"
+            className={`px-3.5 py-2 font-semibold transition-colors ${
+              isAdmin
+                ? 'bg-[#141414] text-[#F3F0E6]'
+                : 'text-[#141414] hover:bg-[#E5E0D0]'
+            }`}
+          >
+            ADMIN
+          </Link>
         </nav>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
-          {user && (
-            <div className="hidden sm:flex items-center gap-2 pr-1">
-              <div className="text-right leading-tight">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            to="/admin"
+            className={`md:hidden px-2.5 py-2 border-2 border-[#141414] font-mono-code text-[11px] font-bold uppercase ${
+              isAdmin ? 'bg-[#141414] text-[#FFC700]' : 'bg-white text-[#141414]'
+            }`}
+          >
+            ADMIN
+          </Link>
+
+          {user ? (
+            <div className="flex items-center gap-2 pr-1">
+              <div className="hidden sm:block text-right leading-tight">
                 <div className="font-mono-code text-xs font-bold text-[#141414] uppercase">
                   {user.name.split(' ')[0]}
                 </div>
@@ -104,11 +99,22 @@ export default function Navbar({ onOpenReport }) {
                 <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
+          ) : (
+            <Link
+              to="/auth"
+              className={`px-3 py-2 border-2 border-[#141414] font-mono-code text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${
+                isAuth
+                  ? 'bg-[#141414] text-[#FFC700]'
+                  : 'bg-white text-[#141414] hover:bg-[#141414] hover:text-[#FFC700]'
+              }`}
+            >
+              SIGN IN
+            </Link>
           )}
 
           <button
             onClick={onOpenReport}
-            className="brutal-btn brutal-shadow-sm bg-[#FFC700] text-[#141414] border-2 border-[#141414] font-mono-code text-xs font-bold uppercase tracking-wider px-4 py-2.5 cursor-pointer whitespace-nowrap"
+            className="brutal-btn brutal-shadow-sm bg-[#FFC700] text-[#141414] border-2 border-[#141414] font-mono-code text-xs font-bold uppercase tracking-wider px-3 sm:px-4 py-2 cursor-pointer whitespace-nowrap"
           >
             + FILE A COMPLAINT
           </button>
