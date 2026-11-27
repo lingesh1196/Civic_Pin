@@ -59,18 +59,36 @@ export default function HomePage({ refreshSignal }) {
     }
     try {
       const data = await apiRequest(`/api/issues/${issueId}/upvote`, { method: 'POST' });
-      setIssues((prev) => prev.map((i) => (i._id === issueId ? data.issue : i)));
+      setIssues((prev) => {
+        const updatedList = prev.map((i) => (i._id === issueId ? data.issue : i));
+        if (sort === 'upvotes') {
+          return [...updatedList].sort(
+            (a, b) => (b.upvotes?.length || 0) - (a.upvotes?.length || 0)
+          );
+        }
+        return updatedList;
+      });
       if (selectedIssue?._id === issueId) {
         setSelectedIssue(data.issue);
       }
+      apiRequest('/api/stats').then(setStats).catch(() => {});
     } catch (err) {
       console.error('Upvote failed:', err);
     }
   }
 
   function handleIssueUpdated(updated) {
-    setIssues((prev) => prev.map((i) => (i._id === updated._id ? updated : i)));
+    setIssues((prev) => {
+      const updatedList = prev.map((i) => (i._id === updated._id ? updated : i));
+      if (sort === 'upvotes') {
+        return [...updatedList].sort(
+          (a, b) => (b.upvotes?.length || 0) - (a.upvotes?.length || 0)
+        );
+      }
+      return updatedList;
+    });
     setSelectedIssue(updated);
+    apiRequest('/api/stats').then(setStats).catch(() => {});
   }
 
   return (

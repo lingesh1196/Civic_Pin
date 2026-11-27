@@ -14,6 +14,7 @@ export default function AdminDashboard() {
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState('');
 
   async function loadAll() {
     const [issuesRes, statsRes] = await Promise.all([
@@ -42,6 +43,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     if (!editing) return;
     setSaving(true);
+    setFeedback('');
     try {
       await apiRequest(`/api/issues/${editing._id}/status`, {
         method: 'PATCH',
@@ -52,8 +54,13 @@ export default function AdminDashboard() {
           resolutionNote: editing.resolutionNote,
         }),
       });
+      const updatedTitle = editing.title;
+      const updatedStatus = editing.status;
       setEditing(null);
       await loadAll();
+      setFeedback(`Updated "${updatedTitle}" to ${updatedStatus}.`);
+    } catch (err) {
+      setFeedback(`Error: ${err.message}`);
     } finally {
       setSaving(false);
     }
@@ -83,6 +90,19 @@ export default function AdminDashboard() {
           </p>
         )}
       </div>
+
+      {/* Feedback banner */}
+      {feedback && (
+        <div
+          className={`px-4 py-2.5 rounded-md border text-sm ${
+            feedback.startsWith('Error:')
+              ? 'bg-[#FBECEC] border-[#EAC6C6] text-[#8C2D2D]'
+              : 'bg-[#EAF6EE] border-[#BEE2CB] text-[#1F5E3B]'
+          }`}
+        >
+          {feedback}
+        </div>
+      )}
 
       {/* Filter tabs */}
       <div className="flex flex-wrap items-center justify-between gap-3">

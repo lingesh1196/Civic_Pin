@@ -16,6 +16,20 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get('/', (_req, res) => {
+  res.json({
+    service: 'CivicPin API',
+    status: 'running',
+    database: getIsMongoConnected() ? 'mongodb' : 'local-json (server/data/db.json)',
+    endpoints: {
+      health: '/api/health',
+      issues: '/api/issues',
+      stats: '/api/stats',
+      auth: '/api/auth/login',
+    },
+  });
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
