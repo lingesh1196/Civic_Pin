@@ -1,0 +1,198 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Shield, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+export default function AuthPage() {
+  const { login, register } = useAuth();
+  const navigate = useNavigate();
+
+  const [mode, setMode] = useState('login');
+  const [name, setName] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      let loggedIn;
+      if (mode === 'login') {
+        loggedIn = await login(email, password);
+      } else {
+        loggedIn = await register({ name, email, password, neighborhood });
+      }
+      navigate(loggedIn.role === 'admin' ? '/admin' : '/');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDemoLogin(demoEmail, demoPassword) {
+    setError('');
+    setLoading(true);
+    try {
+      const loggedIn = await login(demoEmail, demoPassword);
+      navigate(loggedIn.role === 'admin' ? '/admin' : '/');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl border border-[#E4DFD3] max-w-md w-full p-8 space-y-6">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-2 font-mono-code text-[11px] uppercase tracking-widest text-[#C84B31]">
+            <span className="w-2 h-2 rounded-full bg-[#C84B31]" /> CivicPin Access
+          </div>
+          <h1 className="font-display text-2xl font-bold text-[#18181B]">
+            {mode === 'login' ? 'Sign in to CivicPin' : 'Create a citizen account'}
+          </h1>
+          <p className="text-sm text-[#57534E]">
+            {mode === 'login'
+              ? 'File street reports, upvote neighborhood priorities, or open the dispatch console.'
+              : 'Join residents logging and tracking local repairs.'}
+          </p>
+        </div>
+
+        {/* One-click Demo Access */}
+        <div className="grid grid-cols-2 gap-2.5">
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleDemoLogin('citizen@civicpin.org', 'citizen123')}
+            className="flex items-center justify-center gap-2 p-2.5 rounded-lg border border-[#E4DFD3] bg-[#FAF8F4] hover:border-[#18181B] text-xs font-semibold text-[#18181B] transition-colors cursor-pointer"
+          >
+            <User className="w-3.5 h-3.5 text-[#C84B31]" />
+            Demo Citizen
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleDemoLogin('admin@civicpin.org', 'admin123')}
+            className="flex items-center justify-center gap-2 p-2.5 rounded-lg border border-[#E4DFD3] bg-[#FAF8F4] hover:border-[#18181B] text-xs font-semibold text-[#18181B] transition-colors cursor-pointer"
+          >
+            <Shield className="w-3.5 h-3.5 text-[#C84B31]" />
+            Demo Admin
+          </button>
+        </div>
+
+        <div className="relative flex items-center">
+          <div className="flex-grow border-t border-[#E4DFD3]" />
+          <span className="px-3 font-mono-code text-[10px] uppercase tracking-wider text-[#78716C]">
+            or with email
+          </span>
+          <div className="flex-grow border-t border-[#E4DFD3]" />
+        </div>
+
+        {error && (
+          <div className="p-3 rounded-lg bg-[#FFE4E6] border border-[#FECDD3] text-sm text-[#881337]">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {mode === 'register' && (
+            <>
+              <div>
+                <label className="block text-xs font-medium text-[#57534E] mb-1">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Arjun Karthik"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#D6D0C4] text-sm focus:outline-none focus:border-[#18181B]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-[#57534E] mb-1">Neighborhood</label>
+                <input
+                  type="text"
+                  value={neighborhood}
+                  onChange={(e) => setNeighborhood(e.target.value)}
+                  placeholder="e.g., Adyar, Anna Nagar"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#D6D0C4] text-sm focus:outline-none focus:border-[#18181B]"
+                />
+              </div>
+            </>
+          )}
+
+          <div>
+            <label className="block text-xs font-medium text-[#57534E] mb-1">Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#D6D0C4] text-sm focus:outline-none focus:border-[#18181B]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-[#57534E] mb-1">Password</label>
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#D6D0C4] text-sm focus:outline-none focus:border-[#18181B]"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 rounded-lg bg-[#18181B] hover:bg-[#27272A] disabled:opacity-60 text-white font-semibold text-sm transition-colors cursor-pointer"
+          >
+            {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Create account'}
+          </button>
+        </form>
+
+        <div className="text-center text-sm text-[#57534E]">
+          {mode === 'login' ? (
+            <>
+              New here?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('register');
+                  setError('');
+                }}
+                className="font-semibold text-[#C84B31] hover:underline cursor-pointer"
+              >
+                Create an account
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('login');
+                  setError('');
+                }}
+                className="font-semibold text-[#C84B31] hover:underline cursor-pointer"
+              >
+                Sign in
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
