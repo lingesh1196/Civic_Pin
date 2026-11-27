@@ -148,67 +148,60 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-[#E4DFD3] font-mono-code text-[11px] text-[#78716C] uppercase tracking-wider">
-                <th className="py-3 px-4">Ticket / Issue</th>
-                <th className="py-3 px-4">Department</th>
-                <th className="py-3 px-4">Votes</th>
-                <th className="py-3 px-4">Priority</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#EFECE4] text-sm">
-              {filteredIssues.map((issue) => (
-                <tr key={issue._id} className="hover:bg-[#FAF8F4]">
-                  <td className="py-3.5 px-4 max-w-md">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono-code text-[11px] text-[#78716C]">
-                        #{formatTicketId(issue._id)}
-                      </span>
-                      <span className="font-semibold text-[#18181B] line-clamp-1">{issue.title}</span>
-                    </div>
-                    <div className="text-xs text-[#57534E] truncate mt-0.5">{issue.location?.address}</div>
-                    <div className="text-[11px] text-[#78716C] mt-0.5">
-                      Filed {timeAgo(issue.createdAt)} by {issue.reportedBy?.name}
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <div className="font-medium text-[#18181B]">{issue.category}</div>
-                    <div className="text-xs text-[#78716C]">{issue.department}</div>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span className="font-mono-code text-xs font-semibold text-[#C84B31] bg-[#C84B31]/10 px-2 py-1 rounded">
-                      ▲ {issue.upvotes?.length || 0}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <PriorityBadge priority={issue.priority} />
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <StatusBadge status={issue.status} />
-                  </td>
-                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                    <button
-                      onClick={() => setEditing({ ...issue })}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#D6D0C4] hover:border-[#18181B] hover:bg-[#18181B] hover:text-white text-[#18181B] text-xs font-medium mr-2 transition-colors cursor-pointer"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" /> Update
-                    </button>
-                    <button
-                      onClick={() => handleDelete(issue._id)}
-                      title="Delete issue"
-                      className="p-1.5 rounded-lg text-[#78716C] hover:text-[#9F1239] hover:bg-[#FFE4E6] transition-colors cursor-pointer"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="divide-y divide-[#EFECE4]">
+          {filteredIssues.map((issue) => (
+            <div
+              key={issue._id}
+              className="px-4 py-3.5 hover:bg-[#FAF8F4] flex flex-col md:flex-row md:items-center justify-between gap-3"
+            >
+              {/* Left: Ticket, Title, Address & Dept */}
+              <div className="min-w-0 flex-1 space-y-1">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="font-mono-code text-[11px] text-[#78716C] whitespace-nowrap shrink-0">
+                    #{formatTicketId(issue._id)}
+                  </span>
+                  <span className="font-semibold text-sm text-[#18181B] truncate">
+                    {issue.title}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[#57534E]">
+                  <span className="truncate max-w-full">{issue.location?.address}</span>
+                  <span className="text-[#D6D0C4]">·</span>
+                  <span className="font-medium text-[#18181B]">{issue.category}</span>
+                  <span className="text-[#78716C]">({issue.department})</span>
+                </div>
+                <div className="text-[11px] text-[#78716C]">
+                  Filed {timeAgo(issue.createdAt)} by {issue.reportedBy?.name}
+                </div>
+              </div>
+
+              {/* Right: Votes, Priority, Status & Actions */}
+              <div className="flex flex-wrap md:flex-nowrap items-center gap-2.5 shrink-0">
+                <span className="inline-flex items-center gap-1 font-mono-code text-xs font-semibold text-[#C84B31] bg-[#C84B31]/10 px-2.5 py-1 rounded whitespace-nowrap">
+                  ▲ {issue.upvotes?.length || 0}
+                </span>
+
+                <PriorityBadge priority={issue.priority} />
+                <StatusBadge status={issue.status} />
+
+                <div className="flex items-center gap-1.5 pl-1">
+                  <button
+                    onClick={() => setEditing({ ...issue })}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#D6D0C4] hover:border-[#18181B] hover:bg-[#18181B] hover:text-white text-[#18181B] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" /> Update
+                  </button>
+                  <button
+                    onClick={() => handleDelete(issue._id)}
+                    title="Delete issue"
+                    className="p-1.5 rounded-lg text-[#78716C] hover:text-[#9F1239] hover:bg-[#FFE4E6] transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

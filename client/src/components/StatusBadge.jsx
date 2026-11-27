@@ -36,8 +36,8 @@ export function StatusBadge({ status }) {
   const cls = STATUS_TEXT[status] || 'text-stone-700 bg-stone-100 border-stone-200';
   const dot = STATUS_DOTS[status] || 'bg-stone-500';
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${cls}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${cls}`}>
+      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
       {status}
     </span>
   );
