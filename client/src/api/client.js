@@ -23,6 +23,7 @@ export async function apiRequest(path, options = {}) {
   };
 
   const res = await fetch(path, {
+    cache: 'no-store',
     ...options,
     headers,
   });
