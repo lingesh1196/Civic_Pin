@@ -22,7 +22,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFB] text-[#0B1220]">
+    <div className="min-h-screen flex flex-col bg-[#FCFAF7] text-[#1C211E]">
       <Navbar onOpenReport={handleOpenReport} />
 
       <main className="flex-1">
@@ -33,12 +33,10 @@ export default function App() {
         </Routes>
       </main>
 
-      <footer className="border-t border-[#E6E8EC] bg-white py-6 mt-12">
-        <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#64748B]">
-          <span>
-            <strong className="text-[#0B1220] font-semibold">CivicPin</strong> — Transparent civic issue reporting &amp; municipal resolution.
-          </span>
-          <span className="font-mono-code text-[11px] text-[#94A3B8]">MERN Stack · OpenStreetMap</span>
+      <footer className="border-t border-[#E3DDD3] py-6 mt-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#6D746F]">
+          <span>CivicPin — Community civic issue reporting &amp; tracking.</span>
+          <span>Built with MongoDB, Express, React &amp; Node.js</span>
         </div>
       </footer>
 

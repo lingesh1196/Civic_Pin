@@ -1,24 +1,17 @@
 import React from 'react';
 
-export const STATUS_DOTS = {
-  Open: 'bg-[#F59E0B]',
-  'In Progress': 'bg-[#2563EB]',
-  Resolved: 'bg-[#10B981]',
-  Rejected: 'bg-[#EF4444]',
-};
-
-export const STATUS_TEXT = {
-  Open: 'text-[#B45309] bg-[#FFFBEB] border-[#FDE68A]',
-  'In Progress': 'text-[#1D4ED8] bg-[#EFF6FF] border-[#BFDBFE]',
-  Resolved: 'text-[#047857] bg-[#ECFDF5] border-[#A7F3D0]',
-  Rejected: 'text-[#B91C1C] bg-[#FEF2F2] border-[#FECACA]',
+export const STATUS_STYLES = {
+  Open: 'text-[#9A5B13] bg-[#FDF5E6] border-[#EED9B3]',
+  'In Progress': 'text-[#1E4B7A] bg-[#EDF4FA] border-[#C4D9EE]',
+  Resolved: 'text-[#1F5E3B] bg-[#EAF6EE] border-[#BEE2CB]',
+  Rejected: 'text-[#8C2D2D] bg-[#FBECEC] border-[#EAC6C6]',
 };
 
 export const PRIORITY_STYLES = {
-  Low: 'text-[#64748B]',
-  Medium: 'text-[#0284C7]',
-  High: 'text-[#D97706] font-semibold',
-  Critical: 'text-[#DC2626] font-semibold',
+  Low: 'text-[#6D746F]',
+  Medium: 'text-[#4B5563]',
+  High: 'text-[#9A5B13] font-semibold',
+  Critical: 'text-[#B84A27] font-semibold',
 };
 
 export const CATEGORIES = [
@@ -33,25 +26,17 @@ export const CATEGORIES = [
 ];
 
 export function StatusBadge({ status }) {
-  const cls = STATUS_TEXT[status] || 'text-slate-700 bg-slate-50 border-slate-200';
-  const dot = STATUS_DOTS[status] || 'bg-slate-400';
+  const cls = STATUS_STYLES[status] || 'text-[#5C635E] bg-[#F2EFE9] border-[#E3DDD3]';
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${cls}`}
-    >
-      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
+    <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded border whitespace-nowrap ${cls}`}>
       {status}
     </span>
   );
 }
 
 export function PriorityBadge({ priority }) {
-  const cls = PRIORITY_STYLES[priority] || 'text-slate-500';
-  return (
-    <span className={`font-mono-code text-[11px] uppercase tracking-wider whitespace-nowrap ${cls}`}>
-      {priority}
-    </span>
-  );
+  const cls = PRIORITY_STYLES[priority] || 'text-[#6D746F]';
+  return <span className={`text-xs whitespace-nowrap ${cls}`}>{priority} priority</span>;
 }
 
 export function formatTicketId(id = '') {
