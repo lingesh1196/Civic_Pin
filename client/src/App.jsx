@@ -22,23 +22,26 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F4EF] text-[#18181B]">
+    <div className="min-h-screen flex flex-col bg-[#F3F0E6] text-[#141414]">
       <Navbar onOpenReport={handleOpenReport} />
 
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<HomePage refreshSignal={refreshSignal} />} />
+          <Route
+            path="/"
+            element={<HomePage refreshSignal={refreshSignal} onOpenReport={handleOpenReport} />}
+          />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/auth" element={<AuthPage />} />
         </Routes>
       </main>
 
-      <footer className="border-t border-[#E4DFD3] bg-[#F6F4EF] py-6 mt-10">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#78716C]">
+      <footer className="border-t-2 border-[#141414] bg-[#F3F0E6] py-6 mt-12">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono-code text-xs text-[#5A5A52]">
           <span>
-            <strong className="font-display text-[#18181B]">CivicPin</strong> — Public neighborhood issue log & municipal dispatch.
+            <strong className="text-[#141414]">CIVICPIN</strong> — MUNICIPAL DIGITAL COMPLAINT CELL
           </span>
-          <span className="font-mono-code text-[11px]">MERN · OpenStreetMap · Community Verified</span>
+          <span>MERN STACK · PUBLIC LEDGER · TRANSPARENT DISPATCH</span>
         </div>
       </footer>
 

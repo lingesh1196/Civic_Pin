@@ -3,26 +3,54 @@
 @layer base {
   body {
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #F6F4EF;
-    color: #18181B;
+    background-color: #F3F0E6;
+    color: #141414;
   }
 
-  .font-display {
-    font-family: 'Fraunces', Georgia, serif;
+  .font-poster {
+    font-family: 'Anton', Impact, sans-serif;
+    letter-spacing: 0.01em;
   }
 
   .font-mono-code {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
   }
+}
+
+.hazard-stripe {
+  height: 9px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #141414 0px,
+    #141414 10px,
+    #FFC700 10px,
+    #FFC700 20px
+  );
+}
+
+.brutal-shadow {
+  box-shadow: 4px 4px 0px #141414;
+}
+
+.brutal-shadow-sm {
+  box-shadow: 3px 3px 0px #141414;
+}
+
+.brutal-btn {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.brutal-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #141414;
+}
+
+.brutal-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #141414;
 }
 
 .leaflet-container {
   font-family: 'DM Sans', sans-serif;
   z-index: 10;
-}
-
-.leaflet-popup-content-wrapper {
-  border-radius: 12px !important;
-  border: 1px solid #E4DFD3;
-  box-shadow: 0 8px 24px rgba(24, 24, 27, 0.12) !important;
 }

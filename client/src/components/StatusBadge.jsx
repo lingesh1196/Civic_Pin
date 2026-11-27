@@ -1,24 +1,17 @@
 import React from 'react';
 
-export const STATUS_DOTS = {
-  Open: 'bg-[#D97706]',
-  'In Progress': 'bg-[#2563EB]',
-  Resolved: 'bg-[#2D6A4F]',
-  Rejected: 'bg-[#9F1239]',
-};
-
-export const STATUS_TEXT = {
-  Open: 'text-[#92400E] bg-[#FEF3C7]/80 border-[#FDE68A]',
-  'In Progress': 'text-[#1E40AF] bg-[#DBEAFE]/70 border-[#BFDBFE]',
-  Resolved: 'text-[#1B4332] bg-[#D8F3DC]/80 border-[#B7E4C7]',
-  Rejected: 'text-[#881337] bg-[#FFE4E6]/80 border-[#FECDD3]',
+export const STATUS_STYLES = {
+  Open: 'bg-[#FFC700] text-[#141414] border-[#141414]',
+  'In Progress': 'bg-[#0F1E36] text-[#FFC700] border-[#141414]',
+  Resolved: 'bg-[#1B6E3A] text-white border-[#141414]',
+  Rejected: 'bg-[#C92A2A] text-white border-[#141414]',
 };
 
 export const PRIORITY_STYLES = {
-  Low: 'text-[#57534E]',
-  Medium: 'text-[#0369A1]',
-  High: 'text-[#C2410C]',
-  Critical: 'text-[#C84B31] font-semibold',
+  Low: 'text-[#5A5A52]',
+  Medium: 'text-[#0F1E36]',
+  High: 'text-[#B45309] font-bold',
+  Critical: 'text-[#C92A2A] font-bold',
 };
 
 export const CATEGORIES = [
@@ -33,21 +26,21 @@ export const CATEGORIES = [
 ];
 
 export function StatusBadge({ status }) {
-  const cls = STATUS_TEXT[status] || 'text-stone-700 bg-stone-100 border-stone-200';
-  const dot = STATUS_DOTS[status] || 'bg-stone-500';
+  const cls = STATUS_STYLES[status] || 'bg-white text-[#141414] border-[#141414]';
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${cls}`}>
-      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
+    <span
+      className={`inline-flex items-center px-2 py-0.5 font-mono-code text-[10px] font-bold uppercase tracking-wider border whitespace-nowrap ${cls}`}
+    >
       {status}
     </span>
   );
 }
 
 export function PriorityBadge({ priority }) {
-  const cls = PRIORITY_STYLES[priority] || 'text-stone-600';
+  const cls = PRIORITY_STYLES[priority] || 'text-[#5A5A52]';
   return (
-    <span className={`font-mono-code text-[11px] uppercase tracking-wider ${cls}`}>
-      {priority}
+    <span className={`font-mono-code text-[10px] uppercase tracking-widest whitespace-nowrap ${cls}`}>
+      [{priority}]
     </span>
   );
 }

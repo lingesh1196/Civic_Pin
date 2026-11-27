@@ -18,73 +18,74 @@ export default function IssueCard({
       onClick={() => onSelect(issue)}
       onMouseEnter={() => onHover?.(issue._id)}
       onMouseLeave={() => onHover?.(null)}
-      className={`group bg-white rounded-xl border transition-all cursor-pointer p-4 flex gap-3.5 sm:gap-4 items-start ${
+      className={`group bg-white border-2 border-[#141414] transition-all cursor-pointer p-4 flex gap-3.5 sm:gap-4 items-start ${
         isHighlighted
-          ? 'border-[#C84B31] ring-1 ring-[#C84B31]/20'
-          : 'border-[#E4DFD3] hover:border-[#C7BFB0]'
+          ? 'shadow-[5px_5px_0px_#C92A2A] -translate-x-0.5 -translate-y-0.5'
+          : 'brutal-shadow-sm hover:shadow-[5px_5px_0px_#141414] hover:-translate-x-0.5 hover:-translate-y-0.5'
       }`}
     >
-      {/* Tactile Upvote Column */}
+      {/* Tactile Upvote Stamp */}
       <button
         type="button"
         onClick={(e) => {
           e.stopPropagation();
           onUpvote(issue._id);
         }}
-        title={hasUpvoted ? 'Remove upvote' : 'Upvote to prioritize'}
-        className={`shrink-0 w-12 py-2 rounded-lg border flex flex-col items-center justify-center transition-colors cursor-pointer ${
+        title={hasUpvoted ? 'Remove upvote' : 'Push up work-order queue'}
+        className={`shrink-0 w-13 py-2 border-2 border-[#141414] flex flex-col items-center justify-center transition-colors cursor-pointer ${
           hasUpvoted
-            ? 'bg-[#C84B31] border-[#C84B31] text-white'
-            : 'bg-[#FAF8F4] border-[#E4DFD3] text-[#44403C] hover:border-[#C84B31] hover:text-[#C84B31]'
+            ? 'bg-[#FFC700] text-[#141414]'
+            : 'bg-[#F3F0E6] text-[#141414] hover:bg-[#FFC700]'
         }`}
       >
-        <ChevronUp className="w-4 h-4 stroke-[2.5]" />
-        <span className="font-mono-code text-sm font-semibold leading-none mt-0.5">
+        <ChevronUp className="w-4 h-4 stroke-[3]" />
+        <span className="font-mono-code text-sm font-bold leading-none mt-0.5">
           {upvoteCount}
         </span>
       </button>
 
-      {/* Main Dispatch Content */}
+      {/* Main Ticket Content */}
       <div className="flex-1 min-w-0 space-y-2">
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-          <span className="font-mono-code text-[11px] text-[#78716C]">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="font-mono-code text-[11px] font-bold text-[#141414] bg-[#F3F0E6] border border-[#141414] px-1.5 py-0.5">
             #{formatTicketId(issue._id)}
           </span>
           <StatusBadge status={issue.status} />
-          <span className="text-xs font-medium text-[#57534E]">{issue.category}</span>
-          <span className="text-[#D6D0C4]">·</span>
+          <span className="font-mono-code text-[11px] uppercase tracking-wider text-[#5A5A52] font-semibold">
+            {issue.category}
+          </span>
           <PriorityBadge priority={issue.priority} />
         </div>
 
         <div>
-          <h3 className="text-[16px] font-semibold text-[#18181B] group-hover:text-[#C84B31] transition-colors leading-snug">
+          <h3 className="text-base font-bold text-[#141414] group-hover:text-[#C92A2A] transition-colors leading-snug">
             {issue.title}
           </h3>
-          <p className="text-sm text-[#57534E] mt-1 line-clamp-2 leading-relaxed">
+          <p className="text-sm text-[#4A4A45] mt-1 line-clamp-2 leading-relaxed">
             {issue.description}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-xs text-[#78716C]">
-          <span className="inline-flex items-center gap-1 text-[#44403C] font-medium truncate max-w-full">
-            <MapPin className="w-3.5 h-3.5 text-[#C84B31] shrink-0" />
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 font-mono-code text-[11px] text-[#5A5A52]">
+          <span className="inline-flex items-center gap-1 text-[#141414] font-semibold truncate max-w-full">
+            <MapPin className="w-3.5 h-3.5 text-[#C92A2A] shrink-0" />
             <span className="truncate">{issue.location?.address}</span>
           </span>
           <span className="inline-flex items-center gap-1">
             <MessageSquare className="w-3.5 h-3.5" />
             {issue.comments?.length || 0}
           </span>
-          <span className="font-mono-code text-[11px]">{timeAgo(issue.createdAt)}</span>
+          <span>{timeAgo(issue.createdAt)}</span>
         </div>
       </div>
 
       {/* Real Documentary Photo Thumbnail */}
       {issue.photoUrl && (
-        <div className="hidden sm:block shrink-0 w-28 h-24 rounded-lg overflow-hidden border border-[#E4DFD3] bg-[#F2EFE9]">
+        <div className="hidden sm:block shrink-0 w-28 h-24 overflow-hidden border-2 border-[#141414] bg-[#F3F0E6]">
           <img
             src={issue.photoUrl}
             alt={issue.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover"
           />
         </div>
       )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Plus, Shield, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar({ onOpenReport }) {
@@ -9,81 +9,109 @@ export default function Navbar({ onOpenReport }) {
 
   const isHome = location.pathname === '/';
   const isAdmin = location.pathname === '/admin';
+  const isAuth = location.pathname === '/auth';
 
   return (
-    <header className="sticky top-0 z-40 bg-[#F6F4EF]/95 backdrop-blur-sm border-b border-[#E4DFD3]">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-baseline gap-2 group">
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#C84B31] translate-y-[-1px] group-hover:scale-110 transition-transform" />
-            <span className="font-display text-2xl font-bold tracking-tight text-[#18181B]">
-              CivicPin
-            </span>
-            <span className="hidden sm:inline font-mono-code text-[11px] uppercase tracking-widest text-[#78716C] border-l border-[#D6D0C4] pl-2.5">
-              Chennai Desk
-            </span>
-          </Link>
+    <header className="sticky top-0 z-40 bg-[#F3F0E6] border-b-2 border-[#141414]">
+      {/* Top Roadwork Hazard Stripe */}
+      <div className="hazard-stripe w-full" />
 
-          <nav className="hidden md:flex items-center gap-5 text-sm">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        {/* Brand */}
+        <Link to="/" className="flex items-center gap-2 shrink-0 group">
+          <svg
+            width="22"
+            height="28"
+            viewBox="0 0 24 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="shrink-0"
+          >
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12C0 20.25 12 30 12 30C12 30 24 20.25 24 12C24 5.37 18.63 0 12 0Z"
+              fill="#141414"
+            />
+            <circle cx="12" cy="11.5" r="4.5" fill="#FFC700" />
+          </svg>
+          <span className="font-poster text-2xl sm:text-[26px] tracking-wide leading-none">
+            <span className="text-[#141414]">CIVIC</span>
+            <span className="text-[#C92A2A]">PIN</span>
+          </span>
+        </Link>
+
+        {/* Center Monospace Nav */}
+        <nav className="hidden md:flex items-center gap-2 font-mono-code text-xs uppercase tracking-widest">
+          <Link
+            to="/"
+            className={`px-3.5 py-2 font-semibold transition-colors ${
+              isHome
+                ? 'bg-[#141414] text-[#F3F0E6]'
+                : 'text-[#141414] hover:bg-[#E5E0D0]'
+            }`}
+          >
+            LEDGER
+          </Link>
+          <button
+            type="button"
+            onClick={onOpenReport}
+            className="px-3.5 py-2 font-semibold text-[#141414] hover:bg-[#E5E0D0] transition-colors cursor-pointer uppercase"
+          >
+            REPORT
+          </button>
+          {user?.role === 'admin' && (
             <Link
-              to="/"
-              className={`py-1 border-b-2 transition-colors ${
-                isHome
-                  ? 'border-[#18181B] text-[#18181B] font-semibold'
-                  : 'border-transparent text-[#57534E] hover:text-[#18181B]'
+              to="/admin"
+              className={`px-3.5 py-2 font-semibold transition-colors ${
+                isAdmin
+                  ? 'bg-[#141414] text-[#F3F0E6]'
+                  : 'text-[#141414] hover:bg-[#E5E0D0]'
               }`}
             >
-              Live Log
+              ADMIN
             </Link>
-            {user?.role === 'admin' && (
-              <Link
-                to="/admin"
-                className={`py-1 border-b-2 inline-flex items-center gap-1.5 transition-colors ${
-                  isAdmin
-                    ? 'border-[#C84B31] text-[#C84B31] font-semibold'
-                    : 'border-transparent text-[#57534E] hover:text-[#18181B]'
-                }`}
-              >
-                <Shield className="w-3.5 h-3.5" />
-                Dispatch Console
-              </Link>
-            )}
-          </nav>
-        </div>
+          )}
+          {!user && (
+            <Link
+              to="/auth"
+              className={`px-3.5 py-2 font-semibold transition-colors ${
+                isAuth
+                  ? 'bg-[#141414] text-[#F3F0E6]'
+                  : 'text-[#141414] hover:bg-[#E5E0D0]'
+              }`}
+            >
+              SIGN IN
+            </Link>
+          )}
+        </nav>
 
+        {/* Right Actions */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={onOpenReport}
-            className="inline-flex items-center gap-1.5 bg-[#C84B31] hover:bg-[#B03E26] text-[#FFFDF9] text-sm font-medium px-4 py-2 rounded-lg transition-colors cursor-pointer"
-          >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Pin an issue</span>
-          </button>
-
-          {user ? (
-            <div className="flex items-center gap-2.5 pl-3 border-l border-[#E4DFD3]">
-              <div className="hidden sm:block text-right leading-tight">
-                <div className="text-sm font-medium text-[#18181B]">{user.name}</div>
-                <div className="font-mono-code text-[10px] uppercase tracking-wider text-[#78716C]">
+          {user && (
+            <div className="hidden sm:flex items-center gap-2 pr-1">
+              <div className="text-right leading-tight">
+                <div className="font-mono-code text-xs font-bold text-[#141414] uppercase">
+                  {user.name.split(' ')[0]}
+                </div>
+                <div className="font-mono-code text-[10px] uppercase text-[#5A5A52]">
                   {user.role}
                 </div>
               </div>
               <button
                 onClick={logout}
                 title="Sign out"
-                className="p-2 rounded-lg text-[#78716C] hover:text-[#18181B] hover:bg-[#EAE5DA] transition-colors cursor-pointer"
+                className="p-2 border-2 border-[#141414] bg-white hover:bg-[#141414] hover:text-white transition-colors cursor-pointer"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
-          ) : (
-            <Link
-              to="/auth"
-              className="text-sm font-medium text-[#18181B] hover:text-[#C84B31] px-3 py-2 rounded-lg border border-[#D6D0C4] hover:border-[#18181B] bg-white transition-colors"
-            >
-              Sign in
-            </Link>
           )}
+
+          <button
+            onClick={onOpenReport}
+            className="brutal-btn brutal-shadow-sm bg-[#FFC700] text-[#141414] border-2 border-[#141414] font-mono-code text-xs font-bold uppercase tracking-wider px-4 py-2.5 cursor-pointer whitespace-nowrap"
+          >
+            + FILE A COMPLAINT
+          </button>
         </div>
       </div>
     </header>
